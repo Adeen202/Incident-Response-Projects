@@ -1,12 +1,14 @@
-IDS
+# Network Intrusion Detection and Response
+
+### IDS
 
 An Intrusion Detection System (IDS) is a security solution designed to monitor and analyze network or system activities for signs of malicious activity, unauthorized access, or policy violations. It detects threats such as malware, unauthorized access attempts, or abnormal behavior and generates alerts or logs for further investigation. IDS can be classified into two types: Network-based IDS (NIDS), which monitors network traffic, and Host-based IDS (HIDS), which focuses on activity within individual devices. While IDS are primarily used for detection and alerting, they do not block threats but provide valuable insights for security teams to respond to potential attacks.
 
-Snort
+### Snort
 
 Snort is an open-source network intrusion detection and prevention system (NIDS/NIPS) used to monitor and analyze network traffic for suspicious activity and potential security threats. It captures packets from the network, inspects them using predefined rules, and generates alerts or blocks malicious traffic based on signature-based or anomaly detection. Snort can operate in various modes, including packet capture, intrusion detection, and prevention, making it versatile for real-time network monitoring and attack prevention. Its active community continuously updates its rule sets, enabling it to detect a wide range of known attacks such as DDoS, SQL injection, and buffer overflows. However, configuring Snort for optimal performance requires expertise, and it may consume significant system resources in high-traffic environments.
 
-Practical
+## Practical
 
 We will use 3 VMs for this demonstration:
 
@@ -18,129 +20,124 @@ We will use 3 VMs for this demonstration:
 
 Make sure all VMs are on the same network. For that create a new network and configure each VM network to this adapter.
 
-![](data:image/png;base64,i+bfXUGQwEIAABCEAAAhBwAq2CL105o7dXgs8Xz/V2Ofxc/EkgMoePlwoCEIAABCAAAQgUg0DTuhruxssvs+G+POVwLC7EFXWLYR+jhAAEIAABCEAAAhBYTOStW5hfMCWn8nu2I1WnaXy+o6ObsrQaDwICEIAABCAAAQhAYJMIhLSMKPX6+vsk9ZK4gEaYuhe1oHn05muh8LKdZi0Sgvb5/wNVnHnUIBgIWwAAAABJRU5ErkJggg==)
+![image](https://github.com/user-attachments/assets/8e30f4d9-f0bc-4f1c-b8f5-591f9a9a39d9)
 
-Assign static ip to all for the practical demonstration.
+Assign static ip to all for the practical demonstration. 
 
-Installing and Configuring Snort
+## Installing and Configuring Snort
 
 Start by updating and upgrading the Ubuntu machine. Then install snort using command
-
 \# sudo apt install snort
 
-![](data:image/png;base64,AAooWIFgoevoZPAIIIIAAAvIKECzk9aQaAggggAACihYgWCh6+hk8AggggAAC8goQLOT1pBoCCCCAAAKKFiBYKHr6GTwCCCCAAALyChAs5PWkGgIIIIAAAooWIFgoevoZPAIIIIAAAvIKECzk9aQaAggggAACihYgWCh6+hk8AggggAAC8goQLOT1pBoCCCCAAAKKFiBYKHr6GTwCCCCAAALyChAs5PWkGgIIIIAAAooWIFgoevoZPAIIIIAAAvIKECzk9aQaAggggAACihYgWCh6+hk8AggggAAC8goQLOT1pBoCCCCAAAKKFvh/rY9YlWMeXWIAAAAASUVORK5CYII=)
+![image](https://github.com/user-attachments/assets/281bf9fc-49ff-4e21-9dff-cbb2311581d4)
 
-![](data:image/png;base64,AARGpABkFSOyWyAoEAABEAABEBiFApBVjMJOg5BBAARAAARAYEQKQFYxIrsFggIBEAABEACBUSgAWcUo7DQIGQRAAARAAARGpABkFSOyWyAoEAABEAABEBiFApBVjMJOg5BBAARAAARAYEQK/D+CHNW7UAy6kgAAAABJRU5ErkJggg==)
+![image](https://github.com/user-attachments/assets/5484a60e-68ec-4d7e-8735-0687c906c3a7)
 
 Check ip and interface and use the same in snort configuration
 
-![](data:image/png;base64,O90Gs1vNxFt448YbSPsMrWkuvLvELeyjsGnbsYf/PsdVfl6qy3xd+Z9LdkHfUNTRWadfxkwGkvy0lSTE6R1tzjPmfieUwPBh4+7TlTbxjt1veMbc7uuzKE7Dftv3vxxLl5Q/PSXhdwOMyDkhYy0YbYwNUhedIO228EHzvrYaYlwWajVrSy+Z6+9c81AUWK7vuOXN+9YHRBsL1LAG2BDOrV+MrHafm6qCaDpVuuXAi67r/aSX+kcIeDiDV5HJtQ7BJlfZ9CEhjn5nPwxqEVBl8erFi6N+ILuw4ZNhnYQqHkCSVCYFH9aVHY7BCEAgQAgd4QYF6pC899oAz2lbq9YQHCDhoCtJW6Xp86L5weNOqBUEAAEAAEfncCzCt1Gb50GAm7T8nfnRrIPyAACAACgAAgAAj0IQH67FTaBu7wGoM+jPh3joqo7v6Cvr1pl1/ubT+N/8C8m9+5bPsn78Ci+oc7SBUQAAR+OQH6iAx1/SfcBSFTKCKDfO/UXw6MowR4hyrLifN279RRflaXlFRSZ1CCCxDoCQFgUT2hBZ4FBACBAU+gfUTm/1smDWxaaXjwAAAAAElFTkSuQmCC)
+![image](https://github.com/user-attachments/assets/e460ef9e-e53d-4070-a0d9-03e00e1d85d8)
 
 Check successful installation by checking version.
 
-![](data:image/png;base64,CCtEYEoZAy7AEwDASAABIAAEJi4BNKBSPp4VVigmbjjAFoOBIAAEAACQGBMCAxmROCZM2PCH4wCASAABIAAEJjQBAa370I6ZEKPA2g8EAACQAAIAIExIQBHvI8JdjAKBIAAEAACQAAIGAQGNSKAAwgAASAABIAAEAAC55sAD0TSW2Zg48z5Rg/2gAAQAAJAAAgAATjiHcYAEAACQAAIAAEgMGYE/g8tTVBqWmQvOAAAAABJRU5ErkJggg==)
+![image](https://github.com/user-attachments/assets/5547f2af-5f96-4a8f-bc46-e58f791f1d31)
 
 **Libpcap:** used to capture traffic and is what wireshark uses.
 
-Promiscuous Mode
+### Promiscuous Mode
 
 Promiscuous mode is a network interface mode where the network interface card (NIC) receives all the traffic on the network, regardless of its destination. Normally, a NIC will only capture packets addressed to its own MAC address or broadcast packets, but in promiscuous mode, it listens to and processes all packets on the network segment it is connected to.
 
 Enable promiscous mode on interface. When running a virtual machine move to network settings and set promiscuous mode to “allow all” else if not a VM then run the following command
 
-\# sudo ip link set enp0s3 promisc on
+\# sudo ip link set enp0s3 promisc on. This will enable the mode.
 
-This will enable the mode.
+![image](https://github.com/user-attachments/assets/1a129c37-9fab-43fe-bbeb-833223057818)
 
-![](data:image/png;base64,Dg1yusEIHq8jhQDggAIgAAI6BGgPJfl0gw594N5QtRbudTWXYW7J4jCXLQoptSUjJa50ggKYaXMoiwVFqSaW5jgzNMjL1d05nqQ6T7RVa0K5pPJ+XIGJRTOZcscTnfA1VMGO35lPZhPJ9gOAiAAAj4ggF9Z9wFU/wy5e/fue++9V3duf//KOiU9vRa/1V73egrKyZJpaHh6POWL/iAAAiAAAiAAAkFBAKInKLYJRoIACIAACIAACHhKAKLHU4LoDwIgAAIgAAIgYJIAJUN5P7bl0gbk9LhEhAYgAAIgEF4ERE5PSJbz8zvorsvfCS6+gh3AOT1+WDJNCdHjK+4YFwRAAASClEB4ip4g3SyXZjtJZHbZN0gbOFoyRE+QbijMBgEQAAEQAAEQME0AOT2mkaEDCIAACIAACIBAMBKA6AnGXYPNIAACIAACIAACpglA9JhGhg4gAAIgAAIgAALBSACiJxh3DTaDAAiAAAiAAAiYJgDRYxoZOoAACIAACIAACAQjAYieYNw12AwCIAACIAACIGCaAESPaWToAAIgAAIgAAIgEIwEIHqCcddgMwiAAAiAAAiAgGkCED2mkaEDCIAACIAACIBAMBL4fzIFr4vllrfOAAAAAElFTkSuQmCC)
-
-Configuration
+## Configuration
 
 The conf file for snort is located in /etc/snort directory
 
-![](data:image/png;base64,8vYJrLYkhWZdAIUg1yU+ppXAGZaSQzBZDgU5hUD69lGK/mRL0PE5SgsVgfYIJUgj8CUYwq4MSg9zy674uTBKWco1k7V1aQyq1oYD4ecbDLCaj2F90G6jfXUyEIwauhEKrAFa0dp3rN7Wfyndrd5XesBRE+JSBlguy6TNKIk9HvUHltNUFmF2E5g5+AAgAAoAAIPC7EyAqU1XYIyo20jNYhGoy0rVBSoNOtainmtXKDWDAELExXPFjPkwgNskvLlG0r5Pu00jtV0ftyYBJEOOFbF0ukbffL4mS9D5JW9ewYxHgxtuKNXkwXoIQiza9QkYLarqqXBElRejZINW1kdJErc8jYqfkWBoNVHWmhFkdrT87TfkxHyVqaQ0FuGIofaIZsphJck0KDVLdmqR6NVHUmez9/se0po8IxbKBIsOQMmqi6DdK9WyiyKGEIumaVDJmIYCxQ4KKDCmLeinjBikdFkyGuPv9OGLgSQgz2fv9knBTgkxjNUTUq6P1ZHHz4ukaue/cG3tmjhnSn/j0wt3iFpYTCtTbEVYgEXLvIoXVXxQT1rTfuNBKBYIoUjKqOr3HebpN6FpwbMeF+Grwnd/v3nxB+QEBQAAQaBMBzlk/zEiOfc6Gjf0EmJEuxcI2zVWZZHkCWi5Rf0OxMp4zaMEoURaB5ZgUFQZZHkU/Uhofd6m6L4Fw1uKwBpMkhRBlWCQaASmVqI9Q/BBL5n5AJyhBolmlsh0dKpCruCSFsIhNJQh1QBO5G5P1TJr+CYtFbWpCiXIskiKLJI19KSdBfyP1qRibVAgUA61HJawaJImS1depqCJDoiuDRCYyiyUaEqSY9WR6AUTECqXGIGsyKFIwq5LS+Jra8Bb7CI/YmC6J0lgkJQZJEYGYRFYJ5dMLamM5tigXLAZOkNCxH20i97C11quO3hf2KAs7hdj8kHoQzftCxBrk+R2sLC3+Xb33BJfJ3jOmzXeb5Olk3aPx+d71AXtS6/jtt7RJB0AkQAAQAAQAgd+LAGSoYoiVGPv6XLKe3smLjkj+VaryJ4uRLPsxTpLxAUYhFJsq0Cs7ybE47fEkG2NCXSwrPBLlN65jd/reOUbeqLP4/nfHEjt5xQHxAQFAABAABNqVwK/kxw9uDFcpj5Qg9K5W8ilR9yvSWFes5oydAugUjyTUVR+7vQB9/5LvwN8pygCEBAQAAUAAEOgUBLB1P9thDIKinX/d3wycjJDVsev5EOx4PauUQq/oDKM/pTfRaTxErEKi9iGVwJrfKdoOEBIQAAQAgc5KADJUNsKu88fOukt0ept/Z60DIDcgAAgAAoAAINCeBNjf97M/cmOf9gMPIAAIAAKAACAACPz6BNj3+WOX4mDf+P36ZQUlBAQAAUAAEAAEAAHsMzZs4Od83i/izXOAGSAACAACgAAgAAh0bgJw83W7nbsYQHpAABAABAABQAAQEJEAjB3z41y3D2z+IhIDPwMEAAFAABAABDo3Aa7NH3uAzb9zVySQHhAABAABQAAQEJEAds6ffdJfZE9zIiYLfgYIAAKAACAACAACHZRA8703nO/8wAMIAAKAACAACAACvzwBmONaHhj8f/mKBgUEBAABQAAQAAR4BLCzftifwKIfKAQgAAgAAoAAIPC7EOgMd93/LnUBygkIAAKAACAACLQHAfa9fpx8wNK/PXCDPAABQAAQAAQAgf+cwOd1P9jy/8/rAggACAACgAAgAAi0BwFs7AejfnuABnkAAoAAIAAIAAIdhMDndT+w+XeQGgFiAAKAACAACAACP5cAd+wHA//PpQxSBwQAAUAAEAAEOg4BsN/fceoCSAIIAAKAACAACLQHAfCNX3tQBnkAAoAAIAAIAAIdhwB37Ad+/DpOjQBJAAFAABAABACBn0vg/80n6WBrtxHGAAAAAElFTkSuQmCC)
+![image](https://github.com/user-attachments/assets/54acee4b-46f4-4c7f-9bb6-8149f2351880)
 
-Create a backup file snort1.conf and then open up the configuration file
+Always create a backup file before making changes to the configuration file. Here snort1.conf is the backup file. Now open up the configuration file and start making the required changes
 
-![](data:image/png;base64,mWcet/3HlcSmNWqJQB1hafdYsGnv3Svn/U9smGeRsHvJ9svShhvLPLli+e5owxlb9/uePXBspP7r8KhE6XrIioh1UxdujdAau2rXjdO/HR9l8Dr8vzfSgfuK52unLdmbbLdwx77L2ya0e3Nq7PS9QeVK2SXzI3Hq5VmLz7yymXj4+OnAv49dnt0+N/pVisL9kirBoGKDwgKVdEnllfsfWnDmtdm49VdOHTjmM6CL4ftRHNk+j2VdWDJ11IHnzL4zDh46fPP4rn3eA3qaccjoqBEwVM8eOiXNwJfLAHGuADn8KzlXQOFUbDOnCVP7IcfoW7EwQqskRE1YBOPEhgccERQoXG7WPOyyHIX2cYTKn4lv+dUM/n8qZE2pqxE2EAcP3z/N2GS1xL/eos5GSKWTfnEM0JcUf3FZThvcQAY+xnVEDVT5yT6HebeM8vxYUKdigwXZpusyzdZmmYwgergt4lEDbdoSswP4u9hPHgdATamrRZBPg6QZoBmgGfiiGSBHBcil9zim2+JHBaozkoExTIlDA4mF4cREAFOQ3xKCAWYnZPgogBRi9w5hBYpX2zXKZ5tSV6OA0olpBj4OA/SowMfhkZbSehmomiDAcLz1hAKtN7doy2gGaAZoBmgGaAY+OgMtocf80Y2mBdIM0AzQDNAM0AzQDFQzQIcCtC/QDNAM0AzQDNAMfNEM0KHAF539tPE0AzQDNAM0AzQDNacE01TQDNAM0AzQDNAM0Ax8iQzUbCZUfADql0gPbTPNAM0AzQDNAM1Aa2egZoJA8QGorZ0K2j6aAZoBmgGaAZqBL5GB/wNgeYmTWR3aRwAAAABJRU5ErkJggg==)
+![image](https://github.com/user-attachments/assets/bbea8879-a865-4fbf-8dd5-88280aa03d9e)
 
 Specify the subnet or the network snort will be detecting the traffic on.
 
-![](data:image/png;base64,CIBi1u9CAgwCBAABQAAQ8JYAuM3oLTFwPCAACAACgEC/IwCKWb8LCTAIEAAEAAFAwFsCoJh5SwwcDwgAAoAAINDvCIBi1u9CAgwCBAABQAAQ8JYAKGbeEgPHAwKAACAACPQ7AqCY9buQAIMAAUAAEAAEvCUAipm3xMDxgAAgAAgAAv2OAChm/S4kwCBAABAABAABbwmAYuYtMXA8IAAIAAKAQL8jAIpZvwsJMAgQAAQAAUDAWwKgmHlLDBwPCAACgAAg0O8I/D/5EiriQCw0lAAAAABJRU5ErkJggg==)
+![image](https://github.com/user-attachments/assets/632d025e-e1bf-4efd-afe3-0fcffd5bb5eb)
 
 Snort also allows to specify hosts that might be part on infrastructure.
 
-![](data:image/png;base64,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)
+![image](https://github.com/user-attachments/assets/54a11b9e-624b-4f19-b017-55af10958524)
 
 We can change all of these to our network ones. Next we also have ports where the web servers can be run. We can also modify these to our needs.
 
-![](data:image/png;base64,cJigsL6KUmUG2s7dBS++kNSy7V+UmoczCVpqhZiNSq1KIAoDglqLpEFXPDI3fRQnMINBF7/dDdH+CVykRj45upOoaEmox5Wbw8tKv+k270Tx7VSXC4Jr2QgD/avi1oyNvTOu7J63tq2EboSB6LtP/Pval1YU5XlteqDKzpoymxgUSKARdympD+fn2yvA9CRswQ3kISq/4L+Pw46kU5bu3t/NJCBWjDy5rIkCh63c0Me7YwYipgXcxtOwGTF/3zaSeFddWH07QRHqhcYEENQ+62t4s2ivD9yRswAwVQ/S/jEOolOYE/pPVcCpGwQd9GcXty2evf9Vf+iXT5Evr3VX44Of74jzZ5fODaWHBmWEXf/Vte4oh1rO21Y3bFzBp43XCdWsqe69xgQSaQZfK1aLwwvbK8D0JGzBDxRD9L+MQKqU5AcSzoxuGz5LA0VYCOh26djbWeXNICKsryc4uavr8U1vVQHkgAASAABAAAh8EAcgwPohqAiOBABAAAkAACHxgBPDvYcBKjA+szsBcIAAEgAAQAALvP4GPd/f2979uwEIgAASAABAAAh8uAVjp+eHWHVgOBIAAEAACQOD9JQAZxvtbN2AZEAACQAAIAIEPl4Cinc8+XI/AciAABIAAEAACQODdE0CpWh/QxxrePS+wAAgAASAABIAAEFCFAMySqEIJrgECQAAIAAEgAARaRwAyjNbxgquBABAAAkAACAABVQig9aLmO2GqUgSuAQJAAAgAASAABICAEgKoSCzdUBsOIAAEgAAQAAJAAAhojgDMkmiOJUgCAkAACAABIAAEGgngGQZ8NRzCAQgAASAABIAAENAwAfhquIaBgjggAASAABAAAkAAJwCzJBAGQAAIAAEgAASAgOYJoBgGsySaxwoSgQAQAAJAAAh85ARQEgLvknzkMQDuAwEgAASAABDQPAF8XxIYw9A8VpAIBIAAEAACQOAjJ/B/qq6yGv4LMr8AAAAASUVORK5CYII=)
+![image](https://github.com/user-attachments/assets/69ebe38f-a0ac-4e09-821c-c70b387b59d4)
 
 Scroll down to the bottom of the file to the rules section.
 
 Here we can specify the actual rules file containing rules you want to use. Local.rules file is the one where we create our own rules, which is created by default and is empty
 
-![](data:image/png;base64,B8yTlT/Zs+j2GPWnfL7t+/Sx4uGbIAS05+t8vdjyxWLhlz5Xf9x5+2ywjNilbsx+IMG7DvE+2xLHf/XL7xWM///aOeUbs4yzND31R4jdzF//nRp3fh+tPHT1w+ocVc0f00oxU4BwkFp3Tf9r3+w7fu3Tmwclvl9mmbft47YGnLYcwhOHKFxqspm+crnrlFy27vGzp7lvUwF1HjoUdXvsONfKrpZtOPXt+F23k6gdX/opt+Nz93KtxMQPOqTZ1EoQ9bLwH4XFiepPxCXF8QhZpsN9ondXGyYk2+J1x5vk3b8a3Ol/VansJH301f9WuXMdPvt99euts56yQdxfsihCo89DeARR5pz/67Hhq3zkHfjsWfvbw6UUu5U9Sn2o2FdEcrealOZP36FZODT83OiJPr6kuvB6Fk5f2HoUwSDSjYSs27br+18nbRzYus8vcsWrbaVW4BQcIgAAIgED7BRBnc2fWv7wPWPtroTsF5fbqN49RNtmvut2WeRrd6Xa7KxhvfJV0aMipmTM2PtHvud7taggFBgEQAAEQ6IoCG0780FgsmMXuii306spEfyN4lHl+2PlUiDxeHTKkDAIgAAIggC/QU4IP6bUvRln+S8Me5EGfxDfuutH0D7Kkn9/srseLsx3YhxnD3hljlBV6Kxlijw5UhaRAAARAAATaJtBTpl3aptLBV9PNXfqY0VsuT8Ek5Xl5ZXrs89XB5YHkQAAEQAAEQKCzBZpOuyBO5s4GPWDNR2cbQ34gAAIgAAIgAAJNBJqt+dD1ugjIgQAIgAAIgAAIgEBHChDh7cGO5IS0QAAEQAAEQAAEdAn0lAWnuhzgPAiAAAiAAAiAQCcJtPpnVDopb8gGBEAABEAABECgBwrAyEcPbHSoMgiAAAiAAAj8mwIQfPyb+pA3CIAACIAACPRAgf8DQQ54f9BKHZoAAAAASUVORK5CYII=)
+![image](https://github.com/user-attachments/assets/8dddbaba-cad9-46a7-8087-033ec0ffd17c)
 
 To start snort in self-test mode to test configuration file
 
-![](data:image/png;base64,ssEwELM2GufnX/eTD72kZvtcF/b6upaSIv04AEEAAFAABAABACBYQSACQIaBCAACAACgAAgAAhMAgGwEDMJ0IFIQAAQAAQAAUAAEAAmCGgD/yICyFm6hz1sdOm7bH9Syv3zazgpWIBQQAAQ+E8S+D/qnGjDuI89+wAAAABJRU5ErkJggg==)
+![image](https://github.com/user-attachments/assets/de1aea56-29f3-48f9-9651-f4a25dddd2f3)
 
-![](data:image/png;base64,emwLAMWBABAAAkAACKAE6LsMEApMGUBzAAJAAAgAASDQgwnQ1xDAjEEPbgKgOhAAAkAACAABDOb/rTZ7FfPpge4AAAAASUVORK5CYII=)
+![image](https://github.com/user-attachments/assets/9c3287b6-4baf-4ce3-943f-44d7a5cb9d6b)
 
 Commenting out the custom community rules if we want to write our own.
 
-![](data:image/png;base64,GxT/PqhI5fzZVQUrNTb6wWvmRPgBDgBToAT+FAIQMXSFUq+py8gHwoDLgcnwAlwApwAJ8AJFAWB97ZWURTC8zo4AU6AE+AEOAFO4AMiwK2KD2gwuCicACfACXACnMBHTYBbFR/18HHhOQFOgBPgBDiBD4iAdAoWT5wAJ8AJcAKcACfACRQBgddO7C6CGnkVnAAnwAlwApwAJ/DfJJCv6GL/TUS815wAJ8AJcAKcACdgFIG8J3YbVYTfxAlwApwAJ8AJcAKcgBYC/wdZclyQofN6TgAAAABJRU5ErkJggg==)
+![image](https://github.com/user-attachments/assets/85662699-7c3e-4d9e-8fb2-d7e9d1a08002)
 
 So the only rules now that will be executed are in those that are in the local.rules file
 
-Now if we run
+Now if we run : \# sudo snort –T –i enp0s3 –c /etc/snort/snort.conf no duplicate errors will be shown
 
-\# sudo snort –T –i enp0s3 –c /etc/snort/snort.conf no duplicate errors will be shown
-
-![](data:image/png;base64,goFgiAAAiAAAh0uwDMq+h2csgQBEAABEAABPhUAHoVfFqxUCwQAAEQAAEQ6HaBtr0KIcsDkZ/2mQh1eyCQIQiAAAiAAAiAAI8LwFgFj1cghA8CIAACIAACXCPQ9ilY1LGKB6cp7sM2PK37JUbsX316C+Fot4ug5LqqqtpWK5rCJtCAttH8aYGPA3wc4OMAHwf+O1d2oNOi3E9Fu/cwXVPvnBoSmUR9U6ivhr+Q6t6etRcbRt2q3Vtl8al8MtrwIuVemUA75OcbNoEGtA34OMCXA3xVwtmBj8+VzV9xrP/ycyX0v/oNHIwXQjACpmvObKV4WR19UY9B67/nvSmuoXVRkL7DtJRkezU82qK2KDX1c3nz6iGwCTSgbcDHAb4cGn/LwfchfB/y5fdhB4Yq2L0C0oEkYVcQAAEQAAEQAIE/UuD/0jgNaGdt+asAAAAASUVORK5CYII=)
+![image](https://github.com/user-attachments/assets/cf539ff0-eeba-49d4-a50f-4b276ee96c0c)
 
 However, for this practical we will use these community rules. So there is no need to comment them out.
 
-Wireshark Installation
+## Wireshark Installation
 
-Wireshark
+### Wireshark
 
 Wireshark is a widely used, open-source network protocol analyzer that allows users to capture and inspect network traffic in real-time. It provides detailed insights into the data exchanged across networks by displaying packet-level information for various protocols such as TCP, UDP, HTTP, and DNS. Wireshark helps network administrators, security professionals, and developers troubleshoot network issues, analyze performance, detect malicious activities, and debug communication problems. With its powerful filtering capabilities, Wireshark enables users to dissect network traffic, identify anomalies, and ensure security by offering comprehensive packet capture, analysis, and visualization tools.
 
 \# sudo apt-get install wireshark
 
-![](data:image/png;base64,nkljwlUHg52P80eYHT194Ymb886Z4gOIaNMnkNBkAxXcp4Q0pgHfzw8fMwgTtHR/CRJKwV3PN62vICDaii6wuaq0sEHloO+ThIA7fietp1YFOKzc7dHS6OCll5/9L9bf88AULu7J64P8H0SenT+I6Y0r1jSwUnXNKehP92wAoOfVfbtY+YslQ4iHROaftNb5pN/926+v7FguknDYfodrDs0pKLc4A0utCtuyyunWj6mH3W4EXlo3rcLXetWxABYrwb8ENuvcuhC97KnbFYFsaYgV2IgFllL8fK39uSBuQ5cbnm/cdy3kjthrf9Cbad9zZ1fysF+WcWwrj8wNU8PWpOzmhRIbmHGIUlWScuOCsn5UZUeF5WJv4GIvTHrqKUhFUhmq/UsOvseP+scjfH70bDO3hF+mj/EDNTa7PpmbtmzOEfqWTHABAoAAIAAIAAKAQN8TYG+Hft/r1ZUcIcHBipMUlWZY7vZaK+7r4v2pY58DEjFwf/viqUnZYUeXN6DP0RWy4FlAABAABAABQKBHCUAqUuOhGuZ3TXtUfJ8I49Ledf+hlSy5OPnRpWM7fTN/tQYvNm6icHFiVnmP7JXvE5NAJoAAIAAIAAKAwN9I4K9aZPkbHQRsAgQAAUAAEAAE/h4Cf8Miy9/jDWAJIAAIAAKAACDwVxMA3Y6/2r3AOEAAEAAEAAFAoD8RAN2O/uQNoAsgAAgAAoAAIPBXEwDdjr/avcA4QAAQAAQAAUCgPxEA3Y7+5A2gCyAACAACgAAg8FcTAN2Ov9q9wDhAABAABAABQKA/EcD/nrOo+hMCoAsgAAgAAoAAIAAI9A0BMNvRN5xBLoAAIAAIAAKAACCAw3fvMFlAEBAABAABQAAQAAQAAXYJgEUWdkmB5wABQAAQAAQAAUCgmwTAIks3AYLkgAAgAAgAAoAAIMAuAdDtYJcUeA4QAAQAAUAAEAAEukngf+Wqje612sPSAAAAAElFTkSuQmCC)
+![image](https://github.com/user-attachments/assets/0a4e39f4-3d0d-4cd9-a878-1adb6f551843)
 
 For starting snort in IDS mode use the command:
-
 \# sudo snort –A console –q –c /etc/snort/snort.conf –i enp0s3
 
 Checking status
 
-![](data:image/png;base64,z4LM/7B39Bpda5qC2qNnWpKf0EOTIaECDabh6fo754aOjAEl6NQHhMdtSz+vdmOG0M43vF0FeFezJslBk6iVi8EoNPPcnE+hJY/udZWFVXfzera1cbLIhkOHW/M6y/uT6/rNl/7mWOWjDCkHOWOPgYQb2z2YCpOeVgNAY27F9CsIffPztngSyf7QHy0LRv5eIwWsNgef+ZAI9aWzdXZaglvNC+6lj9EbrGdg4rjy9VKc6IiSKtUGmu8v6k+v4z5YdrZbRNWOdgPlnqw+k7zYCwiOnj5PICglL7wFfoifLQpuX6EGVu62eQEZ/JoGetPnuLgsrrWpqu+jk6XMvbvhe8DAmPd/rsDOCtVmpu8v6M2v3b5AarZa56Afp0Jc56N/WgWWOv8EUgA6AACAACAACgECPE+DpCJselwoUCAgAAoAAIAAIAAJ/DAEQgvyPqSogKCAACAACgAAg0DsJgE9De2e9AKkAAUAAEAAEAIE/hkDbMgf4oOOPqTMgKCAACAACgAAg0KsItC1z8HqkWq+SHggDCAACgAAgAAgAAv86AbDM8a9XARAAEAAEAAFAABD4swmwnAlwbtWfXY1AekAAEAAEAAFA4N8jAKKG/nvsQcmAACAACAACgMBfQYCxARNsvvwr6hIoAQgAAoAAIAAI/CsEsDTWCgfYgPmv8AeFAgKAACAACAACfzwBLARhkB+4AAFAABAABAABQAAQ4I8AsmeCucgBljr4AwhSAQKAACAACAAC/3UCiDPB2DUBfIn/uiUA/QEBQAAQAAQAAT4JtJ4zAZY6+AQIkgECgAAgAAgAAv91Am2HVoGpif+6KQD9AQFAABAABAAB/gj8H/43BKkqJPKIAAAAAElFTkSuQmCC)
+![image](https://github.com/user-attachments/assets/c952160a-b966-4595-9e6c-2b6bb25637ea)
 
 Checking if snort is detecting traffic and logging. Pinging IDS with kali VM
 
-![](data:image/png;base64,E3Oo0O5+GYjosceD13aQrzH0mb4QP+j4j12M802RrAw6tHk8aXYH+5ea/fUbgeTmeL5k0DuQWi0wlGqd9Od1SJm1UARSgk5TDXSbSZL2ogGp8dV/jwanxEdxngdWvHxrt/3VASh9g6cT6fRtWMB8lJfDOLN9ZGkb3XxtZxY5vqGKeVguM1Ua6xgJ1OLxrFyZk4dfawjWpod9cYAfvKJzKAduZk3tsYEb6+xiUNPEhKHxClTRNOLE+PLIsFNsZ58afp4CyhV+RH6zwrs1ngRWeoZtPubW+eWHL2qhKI1fqKasPzaZssRQLF1sgUTnDXhJci09nOFSGXGHxUE8b/K59gqeYI2+aQjHYvWuhOZ7niZFx/ByhTvUatcuXK/7BsSBk+4CPpgv/f3gv8yS75zp67e/j1ED7gnbteS5CFUavOpFT04PUUs2/IRPEBRw/SOIdYdgNbq1w2SplYtD71B3GCRQ7iHKqe5qCZEDBgQYnu6aLZSnVk04GUk6Grbr1pzjTOtG0aK2IrNyqqO31Gy4xRRCITjG1QQQfj/wn8quvkdwpTu5cMMSojMaGI7I/lxg4w/tAyZiqeuD581dwh7qSzzsvpX7J63ylLagEnciSTJAqNBrogkKtRdHyyViMDFqpEZ1vysZd8GlfgOW4XDnrc1naR1oirZDBLf7u6nqOvJzjJ7BjEBxliUX3DG79OoU1LmhsoBzKoTDV9IouqAa3DonNSpLOgl+RkZ9NWiKIDJhpGs/j/DwvEVHkGhB4qAAAAAElFTkSuQmCC)
+![image](https://github.com/user-attachments/assets/e06a74e6-eeec-4a57-92d0-2edd8490e216)
 
-On IDS alerts are generated
+On IDS alerts are being generated
 
-![](data:image/png;base64,9Odqtq3YsMCSKOGBNYovRqS2qtLm7C6KzfYGuiZL7U2VyGnagiVZcV4ZZtNNqbT1adoTJypIQVuUaP9eLWdj23faDxzlqa61nRdQ01J7p9tLdS0BsItCjGp413Re8xM2032C2abL7NZSv3AkNEPkqo796ZXPH7R4cAH+1ZaG8ycp6e3ZJn1EobKk2X11JS9+ya68K8dJka6M02WrrSg++AZShbp49Og67UT9p7x3GGsZ2Rqd+Xshkm14aef0T6SRVYfbk6BpkLRU6AxhEceASgEzREcgBFD9PD2rYlQfYvYeHPPzv1pQnbH/O4fWyaS7me190nv5i2sur1/RlRYhr+FEqekrc/d7KeB+/omaZ6pyw3F3794kTd4CQKWilAWvNrlVuUfG0IfPMi+7/PXhNrzLn/5vWW0FQJBQ6zK1oBr4T7bVmt8j/Z2mrH6fPLAhAuhJieusr2tKiOlhn6RB7Fd4Ke3KgqY5uqK3swJvcEgGQI4nIyq0V6vU09unA/aYyJeHLRqnW8imNun/ZhmSKGDpkKSBY8GEvI9tZdcXDyzxmw4dT0peK9R2wP7jRdoHxQj+Qaj8eN3vY/sGxzQDsAvOG7qUk9v/8gb567/ZSJedM3W3i+J4gAs+jwFPZacjXncwVNMfO9kRwV76nBxz9gWFxWW7ruU+gEtuNRQcHm7kVtErbLF8VNnH13wcFsgzsfJDwD8gnwc3WCmol8aidBD4MDx/5LpG0lDuvYS628Hx9Nti+0uvLzD2P3p5ylrAwIDoy86TW3JjSli8CbDPHz/ewoYo/QpQnh95siNLCGzcxf9LruYzpIhJzB6au5tcAkpUVp14Wpw0oPAe04TPr0uqaa4KMCH5RGesf2I3/OwWwnXDm+RLz+56597lHkW4RZNWk/ZOc8rSTyGpwJ8Lzub6EgNSJbAQgNJRfwYust++dkc7rmO5wIuRF718d9spCNLdigE5akiOhICtoe8lbU5FBZ0NnCn0TQJOjUgZXXmHFy3y69KeccJ/3vHbVUrglY4+KXQfxAIb1WYOQWGAE1PgdIQCXl4oBB8EQlDRgxRw/t//ScszMwHcm4AAAAASUVORK5CYII=)
+![image](https://github.com/user-attachments/assets/8282114b-3560-4fe3-93a5-1095c19e9aca)
 
-Testing Malicious Traffic
+## Testing Malicious Traffic
 
 We will generate malicious traffic towards any victim machine on the network and the IDS will detect this traffic
 
-![](data:image/png;base64,zqah/WY/BOsg6LtoFqZ9DRvF5EMrvrSk2z9OtUWcQCEQ7jurU6aEQBJRRnWrAPDe0BK+BiRirEoiGaXXWbOnAknDxdOtc12T0MmkqIsCMN5VrZUaIaYDn5iMNE//JCFzXQlWkDvlQHKlbraDTaK5zI3kAOU5lphQi5pl/HrXFJ5m2tOlhgGV2bifMAHEPi1gYCl/Q+AaYmiDpaA0QAAAABJRU5ErkJggg==)
+![image](https://github.com/user-attachments/assets/f61fba4a-5baf-4c29-bba0-4e8435aa826f)
 
 Set Victim IP: 10.0.2.3
 
-![](data:image/png;base64,rjHiqlFQKrBgVRPe3Ij5boRMUgGaUrvoQKc6qyrX0pH1S7Q6iBW1e8ryKXahZESrG2SsiEASt0DtekJXxA/tfZKW7DJi2jJWEEGJPMYoUi4RH5fj0llGQnf16i8Wtc4g1Cy0/LcY86gcVzhfvNFhZ42W5GS2hbcHDxS8BvSBAxZSEKnv/ME1KuQ7d6GyM8zRP0RTlVZ5Hs7jMsIHDwSH0/K97tcoFdYBdrV9HDvGks1sD0r7Sw1GWLvxskbhEcts083xDQ3NvBD22cOHduU5WBUmAIU0BbJKcWYIZIJIxI6ATILtyQH//PeAqzLjbE8atl/ZvIBOC++spbRhSEoFBdjnqtdOWEVxYQTMwnZsPzHg0tYp31RfTjCsjjAqfdFfqUsCKZMrxYonzZWbCIHFHlT0UcybIrDERuvofVoN0coISzYxKDM4yKYxgh5IdHuNhRE7am6zpgWUIUBlLwkjGW4psmzuFjkf/+jEdsogjdUAoClWiHfGDmMK7RkT+lI/quDAJpHgsfcJHHwKo2yoCW9K0LI5rO2yPLLKYjAMGffmdSJOegi0xwx/FeEbYThj8RTu83wNDqhDfBUK1s/DkwtSY/X/A05E/Rn4bRhjAAAAAElFTkSuQmCC)
+![image](https://github.com/user-attachments/assets/b1a62014-dfb7-41b4-97c9-2cb320a75f24)
 
 In IDS
 
-![](data:image/png;base64,3BgAAAABJRU5ErkJggg==)
+![image](https://github.com/user-attachments/assets/754a4608-7e6d-4806-995c-6aa4f003be18)
+
 
 *   _01/18-09:29:33.082772 \[\*\*\] \[1:1418:11\] SNMP request tcp \[\*\*\] \[Classification: Attempted Information Leak\] \[Priority: 2\] {TCP} 10.0.2.20:45009 -> 10.0.2.3:161_
 
@@ -166,44 +163,42 @@ Port 162 is used for SNMP Traps (asynchronous alerts sent by devices). This aler
 
 Port 705 (SNMP AgentX) is used for communication between SNMP master and sub-agents.This alert means 10.0.2.20 attempted to communicate with 10.0.2.3 using SNMP AgentX. Attackers sometimes use SNMP misconfigurations to extract information.
 
-Analyzing Traffic Using Wireshark
+## Analyzing Packets Using Wireshark
 
 Capture the traffic and analyze the above alerts
 
 Filter ip.dst==10.0.2.3 && tcp.dstport==161 and analyze the packet
 
-![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAtAAAAGwCAIAAAAPKcUMAAAAAXNSR0IArs4c6QAAqclJREFUeF7tnQWgFNUax710d3cjKaGUgYqKLSZ2d2F3t9itYGN3i4qJ0iiNCBLS0t34fpfDG8eZM7Ozu3eXvXf/85A3zJ78nfrOd+LL+fLLL3fSIwIiIAIiIAIiIAKpJJCzcePGVIavsEVABERABERABERgp5z169cLgwiIgAiIgAiIgAiklEChlIauwEVABERABERABEQAAjnr1q0TCBEQAREQAREQARFIKQFpOFKKV4GLgAiIgAiIgAjkEsjVcKxaterzzz+fPHmykIiACIiACIiACIiAIdCpU6fatWu3bNmyWLFiyTPJWbt27VtvvVWyZMnjjz8+ruCuvfbarvd3jcuLHIuACIiACIhANhPotVOvfJT9YcOGffvtt3Xq1DnuuOOST3auwHHbbbfdf//9Tliv/DBzwbL1W//h2WnbX7l/16pU8qwejdzxuQWOBlf1PaPmQ8mnRiGIQOYQuPXKhZmTGKVEBESgYBBA4Jgxc/qQIT+bDZSMsFu3Mt5uNf/Lfd32d+nSpXrse0CjhtuH3SVLlkyfPn3Tpk3hELaN2P8+BOT8AxVFkyZNKleunABGhnvkhAQ8erxY9nDMW7puC8nMzfo/W/75Zwt/b93pr0Vrk49MIYiACIiACIhAlhMYMjRX2kA0YKjdsmUz//Fs3va3efi8YsWKb74Z6ICKKW3kagdc0kbuGO6SNgiHO7emTp26Y8kX8ghEpGabhLH9z3axg9xv/Y/c5E/0p2e1b1OzbAKZefXENns1qpiAR3lJNYFL96x3Rff6qY5F4YuACIhAVhFYuzZ3Vt+2TduO7Xf1ixqdduvcresefF++YrmDJUS3EVPUIBAjf2zYsCFhziaWJB+LhmPLln8Fjs1b/tn8f+EjPKHPDpkzb0Ue3yF2eKuqTx3dImFAbo+71S3/Qu9Wv1zaCcHI/b1U0cL3HtJ06KWdvzm/Y+92NaxxndOl
+![image](https://github.com/user-attachments/assets/58a57594-c68c-4f4e-a78d-bb01fd2f2cd1)
 
 ip.dst==10.0.2.3 && tcp.dstport==163
 
-![](data:image/png;LWl4AEJCABCUggTsDII87KkhKQgAQkIAEJZAkYeWQJWl8CEpCABCQggTgBI484K0tKQAISkIAEJJAl8BurP7bAjKH1UQAAAABJRU5ErkJggg==)
+![image](https://github.com/user-attachments/assets/1876dfb7-c3fb-4db9-8e93-cc811b9a9cab)
 
 ip.dst==10.0.2.3 && tcp.dstport==705
 
-![](data:image/png;base64,SEgBAQAkKgEwRkZHQCuzoVAkJACAgBITB+BP4Fa/2cWfGK3JAAAAAASUVORK5CYII=)
+![image](https://github.com/user-attachments/assets/4fc0dba2-e2ed-459b-824a-b76188a4ede2)
 
-Responding to Detected Intrusions
+## Responding to Detected Intrusions
 
 Respond to detected alerts from snort by implementing network defenses. We have reviewed and identified the alerts above so now we will set up network defense by setting rules in iptables
 
-Iptables
+### Iptables
 
 iptables is a command-line utility in Linux used for configuring and managing network traffic rules within the kernel’s built-in firewall framework. It allows administrators to define rules that control the flow of network packets based on criteria such as IP addresses, ports, protocols, and packet state. By specifying rules for incoming, outgoing, and forwarded traffic, \*\*iptables\*\* can block, allow, or modify packets, providing a powerful tool for securing systems and networks. It operates using a set of tables (filter, nat, mangle, etc.) that define the actions to be taken on packets in various network scenarios, such as packet filtering, network address translation (NAT), and packet logging.
 
-![](data:image/png;base64,
+![image](https://github.com/user-attachments/assets/49a08b67-9e72-494a-b4fb-738e4ec43cc8)
 
 We added the rule 2 times lets delete one
 
-![](data:image/png;base64,xWP0IksuIlmJUoSb2O2pcDVYnVBCiWPK8fh8LMVCqrDIJk2BRFFMmnVv2jXBLKTyVYINGELjuYS/goXRZB4i3c3qGxuSh5YpkkNr5EiTVXVIr8aXUFMCSHyURQuhinljf+xFGD+1aCibAlx7BrbypUYI5NmUUWI3LyyBxsIbZGotxHtjqbSFBmig+vkVCBuIVitbn80S2bUn5GuTyaykG45D5sGCVyPonVFfFnz3HUwNNQmK1xsmKCMirLMyNCs0Q6CpIoSVXWn7H/xLkX9/599fevKzWSf//f1pMfhDtpYYqA3wEBQAAQAAS+GgHs+1pt/ve1vX0FEKFOL1Qez2XHSldEUNllMAqhmO9klX4n24iwMxqfXCLv1trwrM02rra2Ar6v/WrvD8gIEAAEAAFRCHQ59oAomXyNZ+C6+8rFAWKEoeWKqwvUtuep/5KvOgNbxQUXIAAIAAKAACDwjQnwYsVzUUSu149rGzmSEbIadvwTgm3/5RZSWCU/orcF49pv/FaB7AEBQAAQaE2AN4eMoOj342tBBQMCgAAgAAgAAj2MwI847OthVQDUAQQAAUAAEPjOCQBf+51XMCgeIAAIAAKAwDcnAHztN68CoAAgAAgAAoDAd06A52t7f5DX77ySQPEAAUAAEAAEejWB+m9+QOzxXl2JQHlAABAABACBHk2gfg4ZjGx7dCUB5QABQAAQAAR6NYEWZzT26nIA5QEBQAAQAAQAgZ5KAOyN6qk1A/QCBAABQAAQ+F4I/B9AEyrGafLJIgAAAABJRU5ErkJggg==)
+![image](https://github.com/user-attachments/assets/77224ad1-c2dc-4089-8fb9-86a65edcd544)
 
 We can also block the ports on the victim to strengthen the security
 
-![](data:image/png;base64,
+![image](https://github.com/user-attachments/assets/c275a29b-bafb-4e7d-ab8f-9755b53b2142)
 
-Conclusion
+### Conclusion
 
 We have set up a Network Intrusion Detection System (NIDS), analyzed network traffic, and responded to security incidents. By implementing Snort on a dedicated IDS VM, we monitored network activity, detected unauthorized access attempts, and took preventive actions to secure the network.
-
 Metasploit allowed us to simulate real-world attacks and assess the effectiveness of our defenses. The final step involved incident response, where we implemented firewall rules to block attacker and documented the security event.
-
 By completing this, we developed essential skills in network security, intrusion detection, traffic analysis, and incident response, reinforcing the importance of proactive monitoring and defense mechanisms in cybersecurity.
